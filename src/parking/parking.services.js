@@ -49,9 +49,9 @@ async function getOneParking(parking_id) {
 async function postParkingSpots(newParkingSpots) {
   const parking = await prisma.parking_spots.create({
     data: {
+      id_parking_place: newParkingSpots.id_parking_place,
+      id_user: newParkingSpots.id_user,
       name: newParkingSpots.name,
-      location: newParkingSpots.location,
-      capacity: newParkingSpots.capacity,
       isAvailable: newParkingSpots.isAvailable,
     },
   });
