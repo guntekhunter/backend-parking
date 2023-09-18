@@ -9,7 +9,7 @@ app.use(cors({ origin: "http://127.0.0.1:3000" }));
 
 dotenv.config();
 
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 
 // import controller
 const userController = require("./src/user/user.controller");
