@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "reservation" ALTER COLUMN "start_date" SET DEFAULT CURRENT_TIMESTAMP;

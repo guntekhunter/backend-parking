@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  id             Int             @id @default(autoincrement())
+  email          String          @unique
+  name           String
+  password       String
+  phone_number   Int
+  isOfficer      Boolean
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  reservation    reservation[]
+  parking_places parking_spots[]
+}
+
+model parking_places {
+  id            Int             @id @default(autoincrement())
+  name          String
+  location      String
+  capacity      Int
+  amount        Int
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  reservation   reservation[]
+  parking_spots parking_spots[]
+}
+
+model parking_spots {
+  id               Int             @id @default(autoincrement())
+  id_parking_place Int
+  id_user          Int
+  name             String
+  isAvailable      Boolean
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  reservation      reservation[]
+  parking_places   parking_places? @relation(fields: [id_parking_place], references: [id])
+  user             user            @relation(fields: [id_user], references: [id])
+}
+
+model reservation {
+  id               Int             @id @default(autoincrement())
+  user_id          Int
+  parking_spot_id  Int
+  parking_place_id Int
+  payment_status   Boolean
+  time             String
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  user             user            @relation(fields: [user_id], references: [id])
+  parking_spots    parking_spots   @relation(fields: [parking_spot_id], references: [id])
+  parking_places   parking_places? @relation(fields: [parking_place_id], references: [id])
+  payment          payment[]
+}
+
+model payment {
+  id             Int          @id @default(autoincrement())
+  reservation_id Int
+  amount         Int
+  method         String
+  date           DateTime
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  reservation    reservation? @relation(fields: [reservation_id], references: [id])
+}
